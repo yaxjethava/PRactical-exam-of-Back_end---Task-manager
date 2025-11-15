@@ -1,19 +1,22 @@
-const cloudinary = require("cloudinary").v2;
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
-require("dotenv").config()
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const multer = require('multer');
 
 cloudinary.config({
-    cloud_name: process.env.CLOUD_NAME,
-    api_key: process.env.CLOUD_API_KEY,
-    api_secret: process.env.CLOUD_API_SECRET,
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
 });
 
 const storage = new CloudinaryStorage({
-    cloudinary,
-    params: {
-        folder: "task_managemnt_user_image", // Folder name in Cloudinary
-        allowed_formats: ["jpg", "jpeg", "png", "webp"],
-    },
+  cloudinary: cloudinary,
+  params: {
+    folder: 'task-management-app',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+    resource_type: 'auto',
+  },
 });
 
-module.exports = { cloudinary, storage };
+const upload = multer({ storage: storage });
+
+module.exports = { cloudinary, upload };

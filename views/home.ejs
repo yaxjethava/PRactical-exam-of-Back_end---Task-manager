@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home - Task Manager</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        color: #333;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      .hero-section {
+        text-align: center;
+        color: white;
+        padding: 3rem 0;
+      }
+
+      .hero-section h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .hero-section p {
+        font-size: 1.3rem;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+      }
+
+      .cta-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.3s;
+      }
+
+      .btn-primary {
+        background: white;
+        color: #667eea;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 2px solid white;
+      }
+
+      .btn-secondary:hover {
+        background: white;
+        color: #667eea;
+      }
+
+      .features-section {
+        margin-top: 4rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+      }
+
+      .feature-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: transform 0.3s;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .feature-card h3 {
+        margin-bottom: 1rem;
+        color: #667eea;
+        font-size: 1.3rem;
+      }
+
+      .feature-card p {
+        color: #666;
+        line-height: 1.6;
+      }
+
+      .not-authenticated {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 2rem;
+        border-radius: 10px;
+        text-align: center;
+        color: white;
+      }
+
+      .not-authenticated h2 {
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+      }
+
+      @media (max-width: 768px) {
+        .hero-section h1 {
+          font-size: 2rem;
+        }
+
+        .hero-section p {
+          font-size: 1.1rem;
+        }
+
+        .cta-buttons {
+          flex-direction: column;
+        }
+
+        .btn {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('partials/navbar') %>
+
+    <div class="container">
+      <% if (typeof user !== 'undefined' && user) { %>
+      <div class="hero-section">
+        <h1>Welcome back, <%= user.username %>! 👋</h1>
+        <p>Manage your tasks efficiently and stay organized</p>
+
+        <div class="cta-buttons">
+          <a href="/tasks" class="btn btn-primary">📋 View Tasks</a>
+          <a href="/task/form/new" class="btn btn-secondary">➕ Create New Task</a>
+        </div>
+      </div>
+
+      <div class="features-section">
+        <div class="feature-card">
+          <h3>📝 Easy Task Management</h3>
+          <p>Create, edit, and delete tasks with a simple and intuitive interface.</p>
+        </div>
+
+        <div class="feature-card">
+          <h3>🏷️ Organize by Categories</h3>
+          <p>Organize your tasks using custom categories for better workflow.</p>
+        </div>
+
+        <div class="feature-card">
+          <h3>👥 Collaboration</h3>
+          <p>Assign tasks to team members and track their progress.</p>
+        </div>
+
+        <div class="feature-card">
+          <h3>🎯 Priority Levels</h3>
+          <p>Set task priorities (Low, Medium, High) to focus on what matters.</p>
+        </div>
+
+        <div class="feature-card">
+          <h3>🖼️ Add Images</h3>
+          <p>Attach images to tasks for better context and documentation.</p>
+        </div>
+
+        <% if (user.role === 'admin') { %>
+        <div class="feature-card">
+          <h3>👨‍💼 Admin Controls</h3>
+          <p>Manage all tasks and users with powerful admin features.</p>
+        </div>
+        <% } %>
+      </div>
+      <% } else { %>
+      <div class="not-authenticated">
+        <h2>Welcome to Task Manager! 📋</h2>
+        <p>Please login or register to get started with managing your tasks.</p>
+
+        <div class="cta-buttons">
+          <a href="/login" class="btn btn-primary">🔐 Login</a>
+          <a href="/register" class="btn btn-secondary">📝 Register</a>
+        </div>
+      </div>
+      <% } %>
+    </div>
+  </body>
+</html>

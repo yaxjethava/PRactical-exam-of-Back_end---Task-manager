@@ -1,23 +1,14 @@
-const mongoose = require("mongoose");
-require("dotenv").config()
+const mongoose = require('mongoose');
 
-// Replace with your own connection string from MongoDB Atlas
-const uri = process.env.MONGOODB_ATLAS_URL;
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect("mongodb://localhost:27017/backend_Yax_task_manager");
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+    return conn;
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+    process.exit(1);
+  }
+};
 
-// Connect to MongoDB Atlas
-
-mongoose.connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
-
-const db = mongoose.connection;
-
-db.on('error', (err) => {
-    console.log("❌ Database connection error:", err.message);
-})
-db.once("open", () => {
-    console.log("✅ MongoDB Atlas connected successfully!");
-});
-
-module.exports = db;
+module.exports = connectDB;

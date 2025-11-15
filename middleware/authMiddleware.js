@@ -1,25 +1,35 @@
-const authUser = async (req, res,next) => {
+const jwt = require('jsonwebtoken');
 
-    try {
-        console.log("auth is running");
+const isAuthenticated = (req, res, next) => {
+  const token = req.cookies.token;
 
-        if (req.cookies.userID) {
-            console.log("cookies  : ", req.cookies);
-            next();
+  if (!token) {
+    return res.redirect('/login');
+  }
 
-        } else {
-            return res.redirect('/login');
-        }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    
+    next();
+  } catch (error) {
+    res.clearCookie('token');
+    return res.redirect('/login');
+  }
+};
 
-    } catch (err) {
-        console.log(err.message);
-        return res.status(400).json({
-            message: "Unauthorised!",
-            err: err.message
-        });
-    }
+const isAdmin = (req, res, next) => {
+  if (req.user.role !== 'admin') {
+    return res.status(403).render('error', { message: 'Access denied. Admin only.' });
+  }
+  next();
+};
 
+const isUser = (req, res, next) => {
+  if (req.user.role !== 'user') {
+    return res.status(403).render('error', { message: 'Access denied. User only.' });
+  }
+  next();
+};
 
-}
-
-module.exports = authUser
+module.exports = { isAuthenticated, isAdmin, isUser };
